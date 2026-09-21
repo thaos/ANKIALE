@@ -31,7 +31,7 @@ from .__AbstractModel import AbstractModel
 ## Classes
 ##########
 
-class GEVModel(AbstractModel):##{{{
+class GEVPrecipModel(AbstractModel):##{{{
     
     def __init__( self ) -> None:##{{{
         
