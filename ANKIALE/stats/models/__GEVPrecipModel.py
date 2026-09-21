@@ -17,6 +17,7 @@
 
 ## Packages
 ###########
+import warnings
 
 import numpy as np
 import xarray as xr
@@ -54,7 +55,7 @@ class GEVPrecipModel(AbstractModel):##{{{
     ##}}}
     
     def _map_sdfit( self , Y: np.ndarray , X: np.ndarray ) -> tuple[np.ndarray,dict[str,Any]]:##{{{
-        return (Y,),{ "c_global" : X , "l_global" : sd.link.GEVRatioLocScaleConstant() }
+        return (Y,),{ "c_global" : X , "l_global" : sd.link.GEVRatioLocScaleConstant(n_samples = Y.shape[0]) }
     ##}}}
     
     def _map_scpar( self , **kwargs: dict[str,np.ndarray | xr.DataArray] ) -> dict[str,np.ndarray | xr.DataArray]:##{{{
@@ -67,6 +68,15 @@ class GEVPrecipModel(AbstractModel):##{{{
         scale = hpar.sel( hpar = "scale0" ) * E
         shape = hpar.sel( hpar = "shape0" ) + 0 * X
         return { "loc" : loc , "scale" : scale , "shape" : shape }
+    ##}}}
+
+    def fit_mle( self , Y: np.ndarray , X: np.ndarray , **kwargs: Any ) -> np.ndarray:##{{{
+        law = self.sdlaw( method = "mle" )
+        sdargs,sdkwargs = self._map_sdfit( Y , X[..., np.newaxis] )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            law.fit( *sdargs , **{ **sdkwargs , **kwargs } )
+        return law.coef_
     ##}}}
     
 ##}}}
