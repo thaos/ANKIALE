@@ -63,7 +63,7 @@ class GEVPrecipModel(AbstractModel):##{{{
     ##}}}
     
     def draw_params( self , X: xr.DataArray , hpar: xr.DataArray ) -> dict[str,xr.DataArray]:##{{{
-        E = exp( hpar.sel( hpar = "alpha" ) / hpar.sel( hpar = "loc0" ) * X )
+        E = np.exp( hpar.sel( hpar = "alpha" ) / hpar.sel( hpar = "loc0" ) * X )
         loc   = hpar.sel( hpar = "loc0" )  * E
         scale = hpar.sel( hpar = "scale0" ) * E
         shape = hpar.sel( hpar = "shape0" ) + 0 * X
