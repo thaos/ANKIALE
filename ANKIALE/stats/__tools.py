@@ -30,6 +30,7 @@ import logging
 from .models.__AbstractModel import AbstractModel
 from .models.__GEVModel    import GEVModel
 from .models.__GEVMinModel import GEVMinModel
+from .models.__GEVPrecipModel import GEVPrecipModel
 from .models.__NormalModel import NormalModel
 
 
@@ -58,6 +59,8 @@ def nslawid_to_class( nslawid: str ) -> AbstractModel:
             cnslaw = GEVModel
         case "GEVMin":
             cnslaw = GEVMinModel
+        case "GEVPrecip":
+            cnslaw = GEVPrecipModel
         case "Normal":
             cnslaw = NormalModel
         case _:
